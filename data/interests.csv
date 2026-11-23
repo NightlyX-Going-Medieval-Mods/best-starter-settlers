@@ -1,0 +1,30 @@
+interest_id,name,related_skill,description,related_goals
+PhysicalLabourPreference,Unskilled Labour,,"Non-specialist, physical work such as hauling and stewarding",StockpileHaulingGoal;StockpileUrgentHaulingGoal;ChangeDoorLockStateGoal;SetupTrapGoal;ChangeLockStateGoal;DeliverFuelGoal;BuryBodyGoal;ProductionCarcassDisposalGoal;BarrelFillGoal;OpenShelfGoal
+MiningPreference,Mine,Mining,Digging and mining marked areas on the map.,DigGoal
+ConstructionPreference,Construct,Construction,"Construct, deconstruct and repair any building.",ConstructBuildingGoal;DeliverBuildingMaterialsGoal;RepairBuildingGoal;DeconstructGoal;UninstallBuildingGoal;DeliverMoveBuildingResource
+CraftingPreference,Craft,,"Non-skilled work crafting basic items, like bricks.",ProductionCraftingGoal
+HuntingPreference,Hunt,Marksman,Hunting marked animals.,HuntingGoal
+PlantsPreference,Botany,Botanical,"Used for sowing, growing, harvesting, and gathering plants, herbs and fruits.",PlantCropsGoal;ChopTreeGoal;HarvestGoal
+SmithingPreference,Smithing,Smithing,Making items out of metal,ProductionSmithingGoal
+WoodWorkPreference,Carpentry,Carpentry,Making items and weapons out of wood.  Produces items at:,ProductionCarpentryGoal
+CookingPreference,Cooking,Culinary,Producing meals and beverages. Preserving food. Butchering.,ProductionCookingGoal
+TailoringPreference,Tailoring,Tailoring,Creating clothing and hats with cloth and leather.,ProductionTailoringGoal
+IntelectualPreference,Intellectual,Intelectual,Contemplating and writing everything down so it can be used to advance the settlement.,ProductionResearchGoal;ProductionChemistryGoal
+TendingPreference,Tend,Medicine,Tend to the wounds of others. Carry unconscious settlers to beds.,SelfTendWoundsGoal;CarryToBedGoal;TendWoundsGoal;ProductionChemistryGoal
+AnimalPreference,Animal Handling,AnimalHandling,"Taming, training, slaughtering, roping, releasing and harvesting resources from animals.",ProductionAnimalGoal;AnimalFeederHaulingGoal;TameAnimalGoal;TrainAnimalGoal;HarvestAnimalGoal;RopeAnimalGoal;SlaughterAnimalGoal;ReleaseAnimalGoal;FishingGoal
+ArtPreference,Art,Art,Create works of art.,ProductionArtGoal
+RangedCombatPreference,Ranged Combat,Marksman,"Using Ranged Weapons like bows, crossbows or throwing weapons in combat and hunting",AttackGoal;HuntingGoal
+MeleeCombatPreference,Melee Combat,Melee,Using Melee Weapons in combat,AttackGoal
+ShamanPreference,Druid Duties,,Leading an Oak Brethren ceremony,RitualEventGoalShaman;ShamanRoleGoal
+PriestPreference,Chaplain Duties,,Leading a Restitutionist ceremony,SermonEventGoalPriest;PriestRoleGoal
+BardPreference,Bard Duties,,Performing at feasts and in the Great Hall during bard appointed hours,FeastEventGoalBard;BardRoleGoal
+TradingPreference,Barter,Speechcraft,Bartering with Merchants and Negotiating,TradeGoal;TalkToGoal
+LibrarianPreference,Librarian,,,MasterClassEventGoalLibrarian;LibrarianRoleGoal
+SergeantPreference,Sergeant,,,SergeantRoleGoal
+BrokerPreference,Broker,,,BrokerRoleGoal
+FirefightPreference,Firefight,,Quench fires near your settlement. Extinguish flames while they are small by stomping on them.,TakeOutFireGoal
+GaolerPreference,Gaoler,,Prisoner care and management is the Gaoler's assignment. Gaolers also strip new prisoners of belongings and manage their release.,RopeEnemyGoal;PrisonStashHaulingGoal;ReleasePrisonerGoal;StripCaptiveGoal
+FishingPreference,Fish,,Catch fish for food by angling.,FishingGoal
+ConvalescePreference,Convalesce,,Convalesce while wounds heal.,RestGoal
+PatientPreference,Patient,,,PatientGoal
+TrainingPreference,Combat Train,,Practicing combat skills with ranged and melee weapons.,ProductionTrainGoal

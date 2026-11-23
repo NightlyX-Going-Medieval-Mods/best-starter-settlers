@@ -1,0 +1,12 @@
+rule,value,note
+maxCreationPoints,90,creation-point budget per settler
+baseSkillCount,85,base skill pool (exact use is in compiled code)
+pseudonymChance,25,% chance a random settler gets a pseudonym
+ageMin,22,
+ageMax,70,
+perks_age_18_25,0-2,perks allowed by age
+perks_age_25_35,1-3,perks allowed by age
+perks_age_35_45,2-4,perks allowed by age
+perks_age_45_200,3-5,perks allowed by age
+passions_tier1,2-4,interest/passion counts on generation (tiers unverified)
+passions_tier2,0-2,interest/passion counts on generation (tiers unverified)

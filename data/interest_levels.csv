@@ -1,0 +1,7 @@
+level,name,skill_multiplier,description
+1,Resentful,0.2,Settler will gain only 0.2x XP \nGain negative mood modifiers when performing this job
+2,Unwilling,0.5,Settler will gain only 0.5x XP \nGain negative mood modifiers when performing this job
+3,Indifferent,1,Settler will gain 1x XP
+4,Eager,2.5,Settler will gain 2.5x more XP \nGain positive mood modifiers when performing this job
+5,Passionate,4,Settler will gain 4x more XP \nGain positive mood modifiers when performing this job
+6,Incapable,0,Settler cannot do this job

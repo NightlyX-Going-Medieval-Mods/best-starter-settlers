@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Going Medieval – Settler Planner</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Settler Planner</h1>
+      <p class="sub">Min-max your Going Medieval starting settlers from the game's own data.</p>
+    </div>
+    <nav id="tabs">
+      <button data-tab="team" class="active">Team Builder</button>
+      <button data-tab="explore">Explore Options</button>
+      <button data-tab="roles">Roles</button>
+      <button data-tab="help">How it works</button>
+    </nav>
+  </header>
+
+  <main>
+    <div id="status" class="status">Loading data…</div>
+
+    <!-- TEAM -->
+    <section id="tab-team" class="tab active">
+      <div class="toolbar">
+        <label>Template <select id="g-template"></select></label>
+        <label>Settlers <input id="g-count" type="number" min="1" max="6" value="3"></label>
+        <label title="Shared pool = points per settler × settlers">Points / settler <input id="g-budget" type="number" min="0" max="300" value="90"></label>
+        <span id="g-pool" class="meta"></span>
+        <label title="Highest level a skill can reach (50 in-game)">Max level <input id="g-cap" type="number" min="1" max="50" value="50"></label>
+        <label title="How much a matching interest is worth compared to one skill point">Interest weight <input id="g-iw" type="number" min="0" max="20" step="0.5" value="5"></label>
+        <label><input id="g-bad" type="checkbox" checked> Allow point-refund (bad) perks</label>
+        <label>max <input id="g-maxbad" type="number" min="0" max="5" value="1"></label>
+        <label title="Advanced Customization allows up to 10 perks per settler">Max perks <input id="g-maxperks" type="number" min="0" max="10" value="10"></label>
+        <button id="run" class="primary">Optimize team</button>
+        <button id="reset" class="ghost">Reset</button>
+      </div>
+      <div id="settlers" class="settlers"></div>
+      <h2>Team overview</h2>
+      <div id="team-summary"></div>
+    </section>
+
+    <!-- EXPLORE -->
+    <section id="tab-explore" class="tab">
+      <div class="toolbar">
+        <label>Category
+          <select id="x-cat">
+            <option value="">All</option>
+            <option value="old_background">Old background</option>
+            <option value="recent_background">Recent background</option>
+            <option value="pseudonym">Pseudonym</option>
+            <option value="perk">Perk</option>
+          </select>
+        </label>
+        <label>Search <input id="x-q" type="search" placeholder="name or description"></label>
+        <label>Score with weights of <select id="x-settler"></select></label>
+        <label>Skill <select id="x-skill"></select> ≥ <input id="x-min" type="number" value="1" style="width:4em"></label>
+        <label>Interest in <select id="x-int"></select> at least
+          <select id="x-intlvl"><option value="4">Eager</option><option value="5">Passionate</option></select>
+        </label>
+      </div>
+      <p class="hint">Click a column header to sort. Banning a perk keeps the optimizer from ever picking it.</p>
+      <div class="table-wrap"><table id="x-table"></table></div>
+    </section>
+
+    <!-- ROLES -->
+    <section id="tab-roles" class="tab">
+      <p class="hint">Roles are assigned in-game once a settler meets the requirements. They aren't chosen at creation, but they're worth planning for.</p>
+      <div class="table-wrap"><table id="r-table"></table></div>
+    </section>
+
+    <!-- HELP -->
+    <section id="tab-help" class="tab prose">
+      <h2>How it works</h2>
+      <p>Every option below comes from the game files (<code>data/*.csv</code>, extracted from <code>StreamingAssets</code>).</p>
+      <h3>Game rules (checked in the decompiled game code)</h3>
+      <ul>
+        <li><b>Points:</b> a settler costs <i>trait costs + Σ (skill level − level from traits)</i>. The team limit is 90 × settlers, shared, with no per-settler cap. Levels from traits are free, and each extra level costs 1 point.</li>
+        <li><b>Negative modifiers cost points:</b> levels can't go below 0, so a trait giving Art −3 costs 3 points.</li>
+        <li><b>Skill levels:</b> 0 to 50.</li>
+        <li><b>Interests (passions) can't be bought.</b> They come only from backgrounds, pseudonym and perks. Stacking: the same level twice stays the same, and different levels combine as <i>clamp(a + b − 3, 1, 5)</i>. So Eager + Passionate = Passionate, and Eager + Unwilling = Indifferent.</li>
+        <li><b>Perks:</b> up to 10 in Advanced Customization, at any age. Age brackets only affect random settlers. Conflicting perks can't be combined.</li>
+        <li><b>Body type:</b> backgrounds and pseudonyms tagged Male/Female are only for that body type (Monk, Nun, The Spear Maiden, The Paramour). Perks aren't restricted in the editor.</li>
+        <li><b>Age:</b> doesn't affect perks or points. Old-age death only starts at 66.</li>
+      </ul>
+      <h3>Value</h3>
+      <p>Each settler has a <b>priority</b> (how much you care) and a <b>target level</b> per skill.
+        Levels up to the target are worth <i>priority</i> each. Levels above it, up to the max level, are worth only 20% of that.
+        Interests add <i>interest weight × priority × bonus</i>: Passionate +2 · Eager +1 · Indifferent 0 · Unwilling −1 · Resentful −2 · Incapable −3.
+        In the game files Passionate gives ×4 skill gain and Eager ×2.5.</p>
+      <p><b>Solo:</b> spread the targets (a generalist with 6–10 in the survival skills). <b>Team:</b> give each settler a deep main skill
+        plus a few low-priority secondaries, so no points go unspent.</p>
+      <h3>Optimizer</h3>
+      <p>For several "prices per point", every settler picks the backgrounds/pseudonym/perks that are worth more than buying those
+        levels directly. The leftover pool then goes to skill levels across the whole team, cheapest gain first. The best team overall is kept.
+        Perk sets respect conflicts, the perk limit and your cap on point-refund perks, and are then refined by trying to add, drop or swap single perks.
+        Click an alternative to swap a settler's traits: skill points are re-spent automatically.</p>
+      <h3>Not scored (judge these yourself)</h3>
+      <ul>
+        <li>Perk effects other than skills and interests: movement speed, XP gain, mood rules, chemistry with other perks. They're shown in each perk's details.</li>
+        <li><i>Ascetic</i> (−13) ignores every bed, bedroom and comfort mood, good or bad, and dislikes rooms that are "too impressive". It's often fine in a rough early colony.</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

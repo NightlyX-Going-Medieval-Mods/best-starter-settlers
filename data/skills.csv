@@ -1,0 +1,15 @@
+skill_id,skill,enum_number
+AnimalHandling,Animal Handling,1
+Art,Art,14
+Botanical,Botanical,2
+Carpentry,Carpentry,3
+Construction,Construction,4
+Culinary,Culinary,5
+Intelectual,Intelectual,6
+Marksman,Marksman,7
+Medicine,Medicine,8
+Melee,Melee,9
+Mining,Mining,13
+Smithing,Smithing,10
+Speechcraft,Speechcraft,11
+Tailoring,Tailoring,12
