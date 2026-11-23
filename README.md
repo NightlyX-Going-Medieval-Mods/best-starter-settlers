@@ -9,7 +9,7 @@ All data comes from the player's own game install. Nothing is scraped from wikis
 ## Run it
 
 ```bash
-cd ~/vincent/going-medieval
+cd path/to/best-starter-settlers   # the folder containing index.html
 python3 -m http.server 8000      # then open http://localhost:8000 (Ctrl+C to stop)
 ```
 
@@ -19,7 +19,7 @@ After changing JS, reload with **Ctrl+F5** so the cached scripts are replaced.
 ## Layout
 
 ```
-going-medieval/
+best-starter-settlers/
 ├── index.html            page shell: tabs Team Builder / Explore Options / Roles / How it works
 ├── style.css             dark "medieval" theme
 ├── core.js               ALL logic: CSV parsing, game rules, team optimizer. No DOM, so Node can test it
@@ -109,6 +109,49 @@ console.log(c.optimizeTeam(d,[{weights:{Intelectual:3},targets:{Intelectual:30},
   ```
   Keep decompiled game code **out of this folder**: it's the developer's copyrighted code, used only as reference.
 - The game is a Unity 2022.3 **Mono** build, so BepInEx 5 + Harmony code mods are possible later. BepInEx is not installed.
+
+## In-game mod (`mod/`)
+
+A BepInEx 5 plugin that puts the optimizer on the character-creation screen. It reads all data **live from the
+game's repositories** (no CSVs), so it follows game updates and data mods. API notes: `mod/NOTES.md`.
+
+- **Use:** turn on *Advanced Customization* and click **BEST STARTER**. A skills × settlers grid opens (a clone of
+  the game's editor popup). Click cells to pick a settler's jobs (gold); columns left on **Auto** get jobs from the
+  mod (green). Then *Optimize team* or *Optimize <name> only*. It sets backgrounds, pseudonym, perks and skill levels
+  through the editor's own setters; cells always show the live level and interest.
+- **Auto job split:** unpicked skills are divided among Auto settlers to maximise Σ over all skills of
+  ln(best settler's output), i.e. the colony is as good at each job as its best worker
+  (`Optimizer.OptimizeTeamAuto`: alternating search from a trait-similarity seed plus two random seeds). Job counts
+  per Auto settler stay within one of each other, since a settler only has so many hours.
+  The learning budget (`LearningXpTotal`) is shared across a settler's jobs.
+- **Scoring (no opinions):** each focus skill's output = the game's per-level attribute curve (`Attributes.json`),
+  times perk multipliers on those attributes, times `GlobalWorkSpeed` × `MotorFunction` for work jobs (as the game's
+  production code does). A job counts half at its starting level and half after learning, where interests and XP
+  perks speed learning through the game's XP curve (`LearningXpTotal`, default 38,800 = level 0→20).
+  Interests also count for mood: the game's own mood values while doing a job (Passionate +6, Eager +3,
+  Unwilling −2, Resentful −4, from `GoalPreferenceLevelData` effectors) × `MoodWeight` (default 0.04 = 4% output per
+  mood point), for every job held plus physical labor, which everyone does. Value = Σ ln(output), so +10% counts the
+  same in every job and for every settler. Human choices: which attribute measures each skill
+  (`mod/src/Core/SkillMap.cs`) and the two config numbers above.
+- **Start levels (a rule, paid before perks):** every job starts at `MinJobLevel` (default 20, stepped down by 5
+  only when the points can't cover it, e.g. 5 jobs per settler) and every other skill the settler doesn't dislike at
+  `MinOtherLevel` (default 3). Points buy a job no higher than `MaxStartLevel` (default 20; backgrounds can give
+  more). Points left after that go to perks and traits by score, then evenly over the other skills (lowest first,
+  fair share per settler), skipping Unwilling, Resentful and Incapable skills.
+- **Not scored:** movement speed, sleep and social effects. Negative-cost traits (backgrounds, pseudonym and perks
+  together) are capped at `MaxRefundTraits` (default 1) per settler because their downsides are mostly mood effects.
+- **Config:** `BepInEx/config/beststarter.cfg` (created on first launch).
+
+```bash
+cd mod
+dotnet build -c Release -p:Deploy=true     # compiles against your game DLLs, copies to BepInEx/plugins/BestStarter/
+cd tests/Harness && dotnet run             # offline check of the optimizer on the game's JSON (no game needed)
+```
+
+Install for players: BepInEx 5 (x64) in the game folder, then `BepInEx/plugins/BestStarter/BestStarter.dll`.
+The game's own *Mods* menu is for data mods only and won't load it.
+Uninstall: delete `BepInEx/plugins/BestStarter/`. Remove BepInEx too by deleting `winhttp.dll`,
+`doorstop_config.ini`, `.doorstop_version`, `changelog.txt` and `BepInEx/`.
 
 ## Ideas / not done yet
 

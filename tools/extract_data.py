@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Extract Going Medieval settler-creation data into data/*.csv (read-only on the game).
 
-Usage (from the going-medieval folder):
+Usage (from the project folder, the one containing index.html):
     python3 tools/extract_data.py "/mnt/c/Program Files (x86)/Steam/steamapps/common/Going Medieval/Going Medieval_Data" data
 
 Sources:

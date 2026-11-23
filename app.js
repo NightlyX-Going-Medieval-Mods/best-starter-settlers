@@ -71,7 +71,7 @@
       data = C.buildData(Object.fromEntries(files.map((f, i) => [f, texts[i]])));
     } catch (e) {
       const st = $("#status"); st.classList.add("error");
-      st.textContent = `Couldn't load data/*.csv (${e.message}).\nBrowsers block fetch() on file:// pages. From the going-medieval folder, run:\n    python3 -m http.server 8000\nthen open http://localhost:8000`;
+      st.textContent = `Couldn't load data/*.csv (${e.message}).\nBrowsers block fetch() on file:// pages. From the folder containing index.html, run:\n    python3 -m http.server 8000\nthen open http://localhost:8000`;
       return;
     }
     state = load();
