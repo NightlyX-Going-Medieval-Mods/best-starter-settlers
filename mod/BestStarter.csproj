@@ -29,6 +29,7 @@
     <Reference Include="0Harmony"><HintPath>$(BepInExCore)/0Harmony.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
   <Target Name="DeployToGame" AfterTargets="Build" Condition="'$(Deploy)' == 'true'">
+    <Exec Command="out=%24(tasklist.exe 2&gt;&amp;1) || { echo 'Cannot run tasklist.exe to check whether Going Medieval is running; not deploying'; exit 1; }; if echo &quot;%24out&quot; | grep -qi 'going medieval'; then echo 'Going Medieval is running: close it before deploying'; exit 1; fi" />
     <MakeDir Directories="$(GameDir)/BepInEx/plugins/BestStarter" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GameDir)/BepInEx/plugins/BestStarter" />
     <Message Importance="high" Text="Deployed to $(GameDir)/BepInEx/plugins/BestStarter" />
